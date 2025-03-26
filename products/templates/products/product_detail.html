@@ -1,29 +1,60 @@
 {% extends "base.html" %}
 
+{% load widget_tweaks %}
+
 {% block content %}
-<h2>{{ product.title }}</h2>
-<p>{{ product.description }}</p>
-<p><strong>Price:</strong> ${{ product.price }}</p>
-<p><strong>In stock:</strong> {{ product.stock }}</p>
+<div class="container my-5">
+  <div class="card mb-4">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+    {% endif %}
+    <div class="card-body">
+      <h2 class="card-title">{{ product.title }}</h2>
+      <p class="card-text">{{ product.description }}</p>
+      <p><strong>Price:</strong> ${{ product.price }}</p>
+      <p><strong>In stock:</strong> {{ product.stock }}</p>
+      <a href="{% url 'add-to-cart' product.pk %}" class="btn btn-primary">Add to Cart</a>
+    </div>
+  </div>
 
-<a href="{% url 'add-to-cart' product.pk %}">Add to Cart</a>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="card-title">Reviews</h3>
+      {% for review in reviews %}
+        <div class="mb-3">
+          <p><strong>{{ review.user }}</strong> - {{ review.rating }}★</p>
+          <p>{{ review.comment }}</p>
+        </div>
+      {% empty %}
+        <p>No reviews yet.</p>
+      {% endfor %}
+    </div>
+  </div>
 
-<h3>Reviews</h3>
-{% for review in reviews %}
-  <p><strong>{{ review.user }}</strong> - {{ review.rating }}★</p>
-  <p>{{ review.comment }}</p>
-{% empty %}
-  <p>No reviews yet.</p>
-{% endfor %}
-
-{% if user.is_authenticated %}
-  <h4>Leave a Review</h4>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit Review</button>
-  </form>
-{% else %}
-  <p><a href="{% url 'account_login' %}">Log in</a> to leave a review.</p>
-{% endif %}
+  {% if user.is_authenticated %}
+    {% if has_reviewed %}
+      <div class="alert alert-info">You have already reviewed this product.</div>
+    {% else %}
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Leave a Review</h4>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="id_rating" class="form-label">Rating</label>
+              {{ form.rating|add_class:"form-select" }}
+            </div>
+            <div class="mb-3">
+              <label for="id_comment" class="form-label">Comment</label>
+              {{ form.comment|add_class:"form-control" }}
+            </div>
+            <button type="submit" class="btn btn-success">Submit Review</button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    <p><a href="{% url 'account_login' %}">Log in</a> to leave a review.</p>
+  {% endif %}
+</div>
 {% endblock %}

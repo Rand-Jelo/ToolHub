@@ -1,12 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Available Tools</h2>
-<ul>
-  {% for product in products %}
-    <li>
-      <a href="{% url 'product-detail' product.pk %}">{{ product.title }}</a> - ${{ product.price }}
-    </li>
-  {% endfor %}
-</ul>
+<div class="container my-5">
+  <h2 class="text-center mb-4">Available Tools</h2>
+  <div class="row">
+    {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+          {% else %}
+            <img src="https://via.placeholder.com/400x250" class="card-img-top" alt="No image available">
+          {% endif %}
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ product.title }}</h5>
+            <p class="card-text"><strong>${{ product.price }}</strong></p>
+            <a href="{% url 'product-detail' product.pk %}" class="btn btn-outline-primary mt-auto">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
