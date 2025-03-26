@@ -1,0 +1,15 @@
+{% autoescape off %}
+Hi {{ user.first_name|default:user.username }},
+
+Thank you for your purchase from ToolHub! Here's a summary of your order:
+
+{% for item in cart_items %}
+- {{ item.product.title }} (x{{ item.quantity }}): ${{ item.product.price|floatformat:2 }}
+{% endfor %}
+
+Total: ${{ total|floatformat:2 }}
+
+We appreciate your business!
+
+— The ToolHub Team
+{% endautoescape %}
