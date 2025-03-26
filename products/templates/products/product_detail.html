@@ -7,4 +7,23 @@
 <p><strong>In stock:</strong> {{ product.stock }}</p>
 
 <a href="{% url 'add-to-cart' product.pk %}">Add to Cart</a>
+
+<h3>Reviews</h3>
+{% for review in reviews %}
+  <p><strong>{{ review.user }}</strong> - {{ review.rating }}★</p>
+  <p>{{ review.comment }}</p>
+{% empty %}
+  <p>No reviews yet.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+  <h4>Leave a Review</h4>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Review</button>
+  </form>
+{% else %}
+  <p><a href="{% url 'account_login' %}">Log in</a> to leave a review.</p>
+{% endif %}
 {% endblock %}
