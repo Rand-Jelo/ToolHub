@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-center mt-5">
+  <div class="card shadow-sm p-4" style="max-width: 500px; width: 100%;">
+    <h2 class="text-center mb-3 text-success">Verify Your Email Address</h2>
+    <p class="text-center">
+      A confirmation email has been sent to your address.  
+      Click the verification link in that email to activate your account.
+    </p>
+    <p class="text-center text-muted small">
+      Didn’t receive it? Please check your spam folder or try signing up again.
+    </p>
+    <div class="text-center mt-3">
+      <a href="{% url 'account_login' %}" class="btn btn-outline-primary">Return to Login</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
