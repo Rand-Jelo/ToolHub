@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Your Orders</h2>
+        <hr>
+        
+        {% if orders %}
+            <div class="list-group">
+                {% for order in orders %}
+                    <a href="{% url 'order_detail' order.id %}" class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Order #{{ order.id }}</h5>
+                            <small class="text-muted">{{ order.created_at|date:"F j, Y" }}</small>
+                        </div>
+                        <p class="mb-1">Status: <strong>{{ order.status }}</strong></p>
+                        <p class="mb-1">Total: <strong>${{ order.total_price }}</strong></p>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No orders yet.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
