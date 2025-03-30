@@ -6,4 +6,6 @@ urlpatterns = [
     path('dashboard/', dashboard, name='dashboard'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('password/change/', include('allauth.urls')),
+    path('products/', include('products.urls')),
+    path('wishlist/', include('product_wishlist.urls')),
 ]

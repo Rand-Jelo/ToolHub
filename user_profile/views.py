@@ -2,14 +2,22 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserChangeForm
 from orders.models import Order
+from product_wishlist.models import Wishlist 
 
 @login_required
 def dashboard(request):
-    # Get the user's orders
     orders = Order.objects.filter(user=request.user)
 
-    # You can add any other data you want to show here, like user profile info
-    return render(request, 'user_profile/dashboard.html', {'orders': orders})
+    try:
+        wishlist = Wishlist.objects.get(user=request.user)
+        wishlist_items = wishlist.items.all() 
+    except Wishlist.DoesNotExist:
+        wishlist_items = []
+
+    return render(request, 'user_profile/dashboard.html', {
+        'orders': orders,
+        'wishlist_items': wishlist_items,
+    })
 
 @login_required
 def profile_edit(request):
@@ -17,7 +25,7 @@ def profile_edit(request):
         form = UserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')  # Redirect to the dashboard after saving changes
+            return redirect('dashboard')
     else:
         form = UserChangeForm(instance=request.user)
     
