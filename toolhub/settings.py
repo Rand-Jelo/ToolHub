@@ -87,6 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.request', # required for user authentication
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'product_wishlist.context_processors.current_year',
             ],
         },
     },
