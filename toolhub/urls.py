@@ -26,4 +26,5 @@ urlpatterns = [
     path('reviews/', include('reviews.urls')),
     path('', include('core.urls')),
     path('orders/', include('orders.urls')),
+    path('user_profile/', include('user_profile.urls')),
 ]

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p class="lead">Manage your account and view your orders below.</p>
+
+        <!-- User Info Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Account Information</h5>
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Member Since:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Your Orders</h5>
+                {% if orders %}
+                    <ul class="list-group">
+                        {% for order in orders %}
+                            <li class="list-group-item">
+                                <a href="{% url 'order_detail' order.id %}">
+                                    Order #{{ order.id }} - Status: {{ order.status }} - Total: ${{ order.total_price }}
+                                </a>
+                                <small>Ordered on: {{ order.date|date:"F j, Y" }}</small>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No orders placed yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Profile and Settings Links -->
+        <div>
+            <a href="{% url 'profile_edit' %}" class="btn btn-primary">Edit Profile</a>
+            <a href="{% url 'account_change_password' %}">Change Password</a>
+        </div>
+    </div>
+{% endblock %}
