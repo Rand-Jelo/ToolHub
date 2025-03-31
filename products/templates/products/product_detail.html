@@ -13,6 +13,25 @@
       <p class="card-text">{{ product.description }}</p>
       <p><strong>Price:</strong> ${{ product.price }}</p>
       <p><strong>In stock:</strong> {{ product.stock }}</p>
+
+      <p><strong>Weight:</strong> {{ product.weight }} kg</p>
+
+      {% if product.battery_time %}
+        <p><strong>Battery Time:</strong> {{ product.battery_time }} hours</p>
+      {% endif %}
+
+      {% if product.tags.all %}
+        <p><strong>Tags:</strong>
+          {% for tag in product.tags.all %}
+            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+      {% endif %}
+
+      {% if product.warranty_period %}
+        <p><strong>Warranty Period:</strong> {{ product.warranty_period }} years</p>
+      {% endif %}
+
       <a href="{% url 'add-to-cart' product.pk %}" class="btn btn-primary">Add to Cart</a>
       
       {% if user.is_authenticated %}
