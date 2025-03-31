@@ -9,6 +9,7 @@ from decimal import Decimal
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from orders.models import Order, OrderItem 
+from django.utils.html import strip_tags
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -34,38 +35,44 @@ def payment_success(request):
     cart_items = CartItem.objects.filter(user=request.user)
 
     if not cart_items.exists():
-        return redirect("cart")  # If cart is empty, redirect to cart page.
+        return redirect("cart")
 
-    # Create the order
+    total = sum(item.product.price * item.quantity for item in cart_items)
+
     order = Order.objects.create(
         user=request.user,
-        total_price=sum(item.product.price * item.quantity for item in cart_items),
-        status='completed',  # Mark order as completed
+        total_price=total,
+        status='completed',
     )
 
-    # Create order items for each product in the cart
     for cart_item in cart_items:
-        product = cart_item.product
         OrderItem.objects.create(
             order=order,
-            product=product,
+            product=cart_item.product,
             quantity=cart_item.quantity,
-            price=product.price * cart_item.quantity  # Store total price for the product
+            price=cart_item.product.price * cart_item.quantity
         )
 
-    # Prepare email content
-    subject = "ToolHub - Payment Confirmation"
-    message = render_to_string("payments/email_receipt.html", {
+    context = {
         'user': request.user,
         'cart_items': cart_items,
-        'order': order
-    })
-    recipient = request.user.email
+        'order': order,
+        'total': total,  # This is what was missing
+    }
 
-    # Send email
-    send_mail(subject, message, 'rand.jelo1@gmail.com', [recipient])
+    subject = "ToolHub - Payment Confirmation"
+    message = render_to_string("payments/email_receipt.html", context)
+    plain_message = strip_tags(message)  # Create plain text version
 
-    # Clear the cart after sending the email
+    
+    send_mail(
+        subject,
+        plain_message,
+        'rand.jelo1@gmail.com',
+        [request.user.email],
+        html_message=message
+    )
+
     cart_items.delete()
 
     return render(request, "payments/payment_success.html", {'order': order})

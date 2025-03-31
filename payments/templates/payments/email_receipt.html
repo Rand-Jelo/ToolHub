@@ -1,15 +1,66 @@
 {% autoescape off %}
-Hi {{ user.first_name|default:user.username }},
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .header { color: #2c3e50; font-size: 24px; margin-bottom: 20px; }
+        .order-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .order-table th { background-color: #f8f9fa; text-align: left; padding: 10px; }
+        .order-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .total { font-weight: bold; font-size: 18px; margin-top: 15px; }
+        .footer { margin-top: 30px; font-size: 14px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <div class="header">Thank you for your order, {{ user.first_name|default:"valued customer" }}!</div>
+    
+    <p>Your ToolHub order <strong>#{{ order.id|default:"N/A" }}</strong> has been confirmed.</p>
+    
+    <table class="order-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.title|default:"Item" }}</td>
+                <td>{{ item.quantity|default:1 }}</td>
+                <td>${{ item.product.price|floatformat:2|default:"0.00" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No items in order</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-Thank you for your purchase from ToolHub! Here's a summary of your order:
+    <div class="total">
+        Order Total: ${{ order.total_price|default:total|floatformat:2 }}
+    </div>
 
-{% for item in cart_items %}
-- {{ item.product.title }} (x{{ item.quantity }}): ${{ item.product.price|floatformat:2 }}
-{% endfor %}
+    {% if order.shipping_address %}
+    <div style="margin-top: 20px;">
+        <h3>Shipping Information</h3>
+        <p>
+            {{ order.shipping_address.street_address|default:"" }}<br>
+            {{ order.shipping_address.city|default:"" }}, 
+            {{ order.shipping_address.state|default:"" }} 
+            {{ order.shipping_address.postal_code|default:"" }}<br>
+            {{ order.shipping_address.country|default:"" }}
+        </p>
+    </div>
+    {% endif %}
 
-Total: ${{ total|floatformat:2 }}
-
-We appreciate your business!
-
-— The ToolHub Team
+    <div class="footer">
+        <p>We appreciate your business! If you have any questions, please contact our support team.</p>
+        <p>— The ToolHub Team</p>
+    </div>
+</body>
+</html>
 {% endautoescape %}
