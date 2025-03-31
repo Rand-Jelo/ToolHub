@@ -6,7 +6,7 @@
 <div class="container my-5">
   <div class="card mb-4">
     {% if product.image %}
-      <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
     {% endif %}
     <div class="card-body">
       <h2 class="card-title">{{ product.title }}</h2>
@@ -17,34 +17,46 @@
       <p><strong>Weight:</strong> {{ product.weight }} kg</p>
 
       {% if product.battery_time %}
-        <p><strong>Battery Time:</strong> {{ product.battery_time }} hours</p>
+      <p><strong>Battery Time:</strong>
+        {% if product.battery_time == 1 %}
+        1 hour
+        {% else %}
+        {{ product.battery_time }} hours
+        {% endif %}
+      </p>
       {% endif %}
 
       {% if product.tags.all %}
-        <p><strong>Tags:</strong>
-          {% for tag in product.tags.all %}
-            {{ tag.name }}{% if not forloop.last %}, {% endif %}
-          {% endfor %}
-        </p>
+      <p><strong>Tags:</strong>
+        {% for tag in product.tags.all %}
+        {{ tag.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </p>
       {% endif %}
 
       {% if product.warranty_period %}
-        <p><strong>Warranty Period:</strong> {{ product.warranty_period }} years</p>
+      <p><strong>Warranty Period:</strong>
+        {% if product.warranty_period == 1 %}
+        1 year
+        {% else %}
+        {{ product.warranty_period }} years
+        {% endif %}
+      </p>
       {% endif %}
 
       <a href="{% url 'add-to-cart' product.pk %}" class="btn btn-primary">Add to Cart</a>
-      
+
       {% if user.is_authenticated %}
-        <form method="post" style="display: inline;">
-          {% csrf_token %}
-          {% if has_in_wishlist %}
-            <button type="submit" name="add_to_wishlist" class="btn btn-danger">Remove from Wishlist</button>
-          {% else %}
-            <button type="submit" name="add_to_wishlist" class="btn btn-warning">Add to Wishlist</button>
-          {% endif %}
-        </form>
+      <form method="post" style="display: inline;">
+        {% csrf_token %}
+        {% if has_in_wishlist %}
+        <button type="submit" name="add_to_wishlist" class="btn btn-danger">Remove from Wishlist</button>
+        {% else %}
+        <button type="submit" name="add_to_wishlist" class="btn btn-warning">Add to Wishlist</button>
+        {% endif %}
+      </form>
       {% else %}
-        <a href="{% url 'account_login' %}" class="btn btn-warning">Login to Add to Wishlist</a>
+      <a href="{% url 'account_login' %}" class="btn btn-warning">Login to Add to Wishlist</a>
       {% endif %}
     </div>
   </div>
@@ -53,40 +65,44 @@
     <div class="card-body">
       <h3 class="card-title">Reviews</h3>
       {% for review in reviews %}
-        <div class="mb-3">
-          <p><strong>{{ review.user }}</strong> - {{ review.rating }}★</p>
-          <p>{{ review.comment }}</p>
-        </div>
-      {% empty %}
-        <p>No reviews yet.</p>
-      {% endfor %}
+  <div class="mb-3">
+    <p><strong>{{ review.user }}</strong> - {{ review.rating }}★</p>
+    <p>{{ review.comment }}</p>
+    {% if review.user == user %}
+      <form method="post" action="{% url 'delete-review' review.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Review</button>
+      </form>
+    {% endif %}
+  </div>
+{% endfor %}
     </div>
   </div>
 
   {% if user.is_authenticated %}
-    {% if has_reviewed %}
-      <div class="alert alert-info">You have already reviewed this product.</div>
-    {% else %}
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Leave a Review</h4>
-          <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="id_rating" class="form-label">Rating</label>
-              {{ form.rating|add_class:"form-select" }}
-            </div>
-            <div class="mb-3">
-              <label for="id_comment" class="form-label">Comment</label>
-              {{ form.comment|add_class:"form-control" }}
-            </div>
-            <button type="submit" class="btn btn-success">Submit Review</button>
-          </form>
-        </div>
-      </div>
-    {% endif %}
+  {% if has_reviewed %}
+  <div class="alert alert-info">You have already reviewed this product.</div>
   {% else %}
-    <p><a href="{% url 'account_login' %}">Log in</a> to leave a review.</p>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Leave a Review</h4>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_rating" class="form-label">Rating</label>
+          {{ form.rating|add_class:"form-select" }}
+        </div>
+        <div class="mb-3">
+          <label for="id_comment" class="form-label">Comment</label>
+          {{ form.comment|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-success">Submit Review</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  {% else %}
+  <p><a href="{% url 'account_login' %}">Log in</a> to leave a review.</p>
   {% endif %}
 </div>
 {% endblock %}

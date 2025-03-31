@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Product
 from reviews.models import Review
 from reviews.forms import ReviewForm
@@ -45,6 +46,16 @@ def product_detail(request, pk):
         'has_reviewed': has_reviewed,
         'has_in_wishlist': has_in_wishlist
     })
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if review.user == request.user:  # Ensure only the review owner can delete
+        product_id = review.product.id
+        review.delete()
+        return redirect('product-detail', pk=product_id)
+    else:
+        return HttpResponseForbidden("You can't delete this review.")
 
 def product_list(request):
     products = Product.objects.all()

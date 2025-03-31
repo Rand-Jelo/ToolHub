@@ -26,7 +26,6 @@
                     <a href="{% url 'order_detail' order.id %}">
                         Order #{{ order.id }} - Status: {{ order.status }} - Total: ${{ order.total_price }}
                     </a>
-                    <small>Ordered on: {{ order.date|date:"F j, Y" }}</small>
                 </li>
                 {% endfor %}
             </ul>
@@ -62,8 +61,7 @@
 
     <!-- Profile and Settings Links -->
     <div>
-        <a href="{% url 'profile_edit' %}" class="btn btn-primary">Edit Profile</a>
-        <a href="{% url 'account_change_password' %}">Change Password</a>
+        <a href="{% url 'account_change_password' %}" class="btn btn-primary">Change Password</a>
     </div>
 </div>
 {% endblock %}
