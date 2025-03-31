@@ -1,14 +1,18 @@
 from django.shortcuts import render
-from products.models import Product
+from products.models import Product, Tag
 from django.db.models import Q
+from products.filters import ProductFilter
 
 def home(request):
-    query = request.GET.get('q')
-    if query:
-        products = Product.objects.filter(
-            Q(title__icontains=query) | Q(description__icontains=query)
-        )
-    else:
-        products = Product.objects.all()
-
-    return render(request, 'core/home.html', {'products': products})
+    # Get all products
+    products = Product.objects.all()
+    
+    # Get all tags for filtering
+    tags = Tag.objects.all()
+    
+    # If a tag is selected, filter products by tag
+    tag_id = request.GET.get('tag')
+    if tag_id:
+        products = products.filter(tags__id=tag_id)
+    
+    return render(request, 'core/home.html', {'products': products, 'tags': tags})
