@@ -71,17 +71,17 @@ Wireframes created using Miro.
 <details>
 <summary>Shop Desktop</summary>
 <br>
-<img src="static/readme-img/product-detail-desktop.png">
+<img src="static/readme-img/shop-desktop.png">
 </details>
 <details>
 <summary>Shop Mobile</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/shop-mobile.png">
 </details>
 <details>
 <summary>Product detail Desktop</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/product-detail-desktop.png">
 </details>
 <details>
 <summary>Product detail Mobile</summary>
@@ -91,66 +91,32 @@ Wireframes created using Miro.
 <details>
 <summary>Cart Desktop</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/cart-desktop.png">
 </details><details>
 <summary>Cart Mobile</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/cart-mobile.png">
 </details>
 <details>
 <summary>Checkout Desktop</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/checkout-desktop.png">
 </details>
 <details>
 <summary>Checkout Mobile</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/checkout-desktop.png">
 </details>
 <details>
 <summary>Dashboard Desktop</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/dashboard-desktop.png">
 </details>
 <details>
 <summary>Dashboard Mobile</summary>
 <br>
-<img src="static/readme-img/product-detail-mobile.png">
+<img src="static/readme-img/dashboard-mobile.png">
 </details>
-<details>
-<summary>Login Desktop</summary>
-<br>
-<img src="static/readme-img/product-detail-mobile.png">
-</details>
-<details>
-<summary>Login Mobile</summary>
-<br>
-<img src="static/readme-img/product-detail-mobile.png">
-</details>
-<details>
-<summary>Signup Desktop</summary>
-<br>
-<img src="static/readme-img/product-detail-mobile.png">
-</details>
-<details>
-<summary>Signin Mobile</summary>
-<br>
-<img src="static/readme-img/product-detail-mobile.png">
-</details>
-<details>
-<summary>Logout Desktop</summary>
-<br>
-<img src="static/readme-img/product-detail-mobile.png">
-</details>
-<details>
-<summary>Logout Mobile</summary>
-<br>
-<img src="static/readme-img/product-detail-mobile.png">
-</details>
-
-
-
-
 <br><br>
 
 ## Database Schema
