@@ -5,58 +5,63 @@
 {% block content %}
 <div class="container my-5">
   <div class="card mb-4">
-    {% if product.image %}
-    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
-    {% endif %}
-    <div class="card-body">
-      <h2 class="card-title">{{ product.title }}</h2>
-      <p class="card-text">{{ product.description }}</p>
-      <p><strong>Price:</strong> ${{ product.price }}</p>
-      <p><strong>In stock:</strong> {{ product.stock }}</p>
+    <div class="row g-0">
+      <div class="col-md-8 order-2 order-md-1">
+        <div class="card-body">
+          <h2 class="card-title">{{ product.title }}</h2>
+          <p class="card-text">{{ product.description }}</p>
+          <p><strong>Price:</strong> ${{ product.price }}</p>
+          <p><strong>In stock:</strong> {{ product.stock }}</p>
+          <p><strong>Weight:</strong> {{ product.weight }} kg</p>
 
-      <p><strong>Weight:</strong> {{ product.weight }} kg</p>
+          {% if product.battery_time %}
+          <p><strong>Battery Time:</strong>
+            {% if product.battery_time == 1 %}
+            1 hour
+            {% else %}
+            {{ product.battery_time }} hours
+            {% endif %}
+          </p>
+          {% endif %}
 
-      {% if product.battery_time %}
-      <p><strong>Battery Time:</strong>
-        {% if product.battery_time == 1 %}
-        1 hour
-        {% else %}
-        {{ product.battery_time }} hours
-        {% endif %}
-      </p>
-      {% endif %}
+          {% if product.tags.all %}
+          <p><strong>Tags:</strong>
+            {% for tag in product.tags.all %}
+            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+          {% endif %}
 
-      {% if product.tags.all %}
-      <p><strong>Tags:</strong>
-        {% for tag in product.tags.all %}
-        {{ tag.name }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      </p>
-      {% endif %}
+          {% if product.warranty_period %}
+          <p><strong>Warranty Period:</strong>
+            {% if product.warranty_period == 1 %}
+            1 year
+            {% else %}
+            {{ product.warranty_period }} years
+            {% endif %}
+          </p>
+          {% endif %}
 
-      {% if product.warranty_period %}
-      <p><strong>Warranty Period:</strong>
-        {% if product.warranty_period == 1 %}
-        1 year
-        {% else %}
-        {{ product.warranty_period }} years
-        {% endif %}
-      </p>
-      {% endif %}
+          <a href="{% url 'add-to-cart' product.pk %}" class="btn btn-primary">Add to Cart</a>
 
-      <a href="{% url 'add-to-cart' product.pk %}" class="btn btn-primary">Add to Cart</a>
-
-      {% if user.is_authenticated %}
-      <form method="post" style="display: inline;">
-        {% csrf_token %}
-        {% if has_in_wishlist %}
-        <button type="submit" name="add_to_wishlist" class="btn btn-danger">Remove from Wishlist</button>
-        {% else %}
-        <button type="submit" name="add_to_wishlist" class="btn btn-warning">Add to Wishlist</button>
-        {% endif %}
-      </form>
-      {% else %}
-      <a href="{% url 'account_login' %}" class="btn btn-warning">Login to Add to Wishlist</a>
+          {% if user.is_authenticated %}
+          <form method="post" style="display: inline;">
+            {% csrf_token %}
+            {% if has_in_wishlist %}
+            <button type="submit" name="add_to_wishlist" class="btn btn-danger">Remove from Wishlist</button>
+            {% else %}
+            <button type="submit" name="add_to_wishlist" class="btn btn-warning">Add to Wishlist</button>
+            {% endif %}
+          </form>
+          {% else %}
+          <a href="{% url 'account_login' %}" class="btn btn-warning">Login to Add to Wishlist</a>
+          {% endif %}
+        </div>
+      </div>
+      {% if product.image %}
+      <div class="col-md-4 d-flex align-items-center order-1 order-md-2">
+        <img src="{{ product.image.url }}" class="img-fluid p-3" style="max-height: 400px; object-fit: contain;" alt="{{ product.title }}">
+      </div>
       {% endif %}
     </div>
   </div>
